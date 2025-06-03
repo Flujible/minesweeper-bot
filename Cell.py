@@ -48,12 +48,13 @@ class Cell:
             if DEBUG:
                 board_screenshot.save("board_screenshot.png")
 
-            self.evaluate_state(board_screenshot)
+            self.state = self.evaluate_state(board_screenshot)
+            print(f"State of cell ({self.x_on_board / self.width}, {self.y_on_board / self.height}) set to: {self.state}")
         else:
             if DEBUG:
                 print(f"Cell at board ({self.x_on_board},{self.y_on_board}) already processed. State: {self.state}")
 
-    def evaluate_state(self, board_screenshot):
+    def evaluate_state(self, board_screenshot: Image) -> CellState:
         """
         Evaluates the cell's state based on a screenshot of the game board.
         `board_screenshot` is a Pillow Image object.
@@ -63,6 +64,7 @@ class Cell:
         colour_pixel_y = self.y_on_board + self.colour_check_offset[1]
 
         # Convert to physical pixel coordinates for the screenshot
+        # This doesn't appear to be needed, keeping in case something changes
         # colour_pixel_x = int(self.x_on_board * SCALING_FACTOR + self.colour_check_offset[0])
         # colour_pixel_y = int(self.y_on_board * SCALING_FACTOR + self.colour_check_offset[1])
 
@@ -71,9 +73,12 @@ class Cell:
         except IndexError:
             print(f"Error: Failed to get pixel at physical ({colour_pixel_x}, {colour_pixel_y}) "
                   f"from screenshot of size ({board_screenshot.width}, {board_screenshot.height}).")
-            return
+            return CellState.UNKNOWN
 
-        actual_rgb = pixel_color_tuple[:3] # Ensure we only use RGB
+        if type(pixel_color_tuple) == tuple:
+            actual_rgb: RGBColour = (pixel_color_tuple[0], pixel_color_tuple[1], pixel_color_tuple[2]) # Ensure we only use RGB, dont use : operator as it gives indeterminate length
+        else:
+            raise Exception(f"Expected tuple from `getpixel` call but got: {type(pixel_color_tuple)}")
 
         if DEBUG:
             print(f"Cell ({self.x_on_board},{self.y_on_board}): Logical check in board ({colour_pixel_x},{colour_pixel_y}), "
@@ -90,23 +95,16 @@ class Cell:
             expected_rgb = number_enum.value # This is already (R,G,B)
             if colors_match_with_tolerance(actual_rgb, expected_rgb): # Adjusted tolerance
                 try:
-                    self.state = CellState[number_enum.name]
                     if DEBUG: print(f"  => State set to: {self.state}")
-                    return
+                    return CellState[number_enum.name]
                 except KeyError:
                     print(f"Warning: No corresponding CellState found for Numbers.{number_enum.name}")
+                    return CellState.UNKNOWN
 
         # Check for empty cell
         if colors_match_with_tolerance(actual_rgb, EMPTY_CELL_COLOR_RGB):
-            self.state = CellState.EMPTY
-            if DEBUG: print(f"  => State set to: {self.state} (Empty)")
-            return
+            if DEBUG: print(f"  => Found state: {CellState.EMPTY} (Empty)")
+            return CellState.EMPTY
 
-        # If no specific state is identified, it might still be unclicked (e.g. if click failed)
-        # or it could be a color we haven't defined (like a bomb, or a different type of empty square).
-        # For now, if it's not a number and not the defined empty color, we'll assume it didn't change
-        # or needs further classification.
-        if self.state == CellState.UNCLICKED: # If it was unclicked and still not identified
-             if DEBUG: print(f"  => Cell ({self.x_on_board},{self.y_on_board}) color {actual_rgb} not recognized as number or empty. Remains UNCLICKED (or needs more color definitions).")
-        # else:
-            # if DEBUG: print(f"  => Cell ({self.x_on_board},{self.y_on_board}) color {actual_rgb} not recognized. Current state: {self.state}")
+        # We have not identified the state
+        return CellState.UNKNOWN

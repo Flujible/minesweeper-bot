@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class CellState(Enum):
+    UNKNOWN = 0
     UNCLICKED = 1
     EMPTY = 2
     FLAGGED = 3 # Not used in current logic but good to have
