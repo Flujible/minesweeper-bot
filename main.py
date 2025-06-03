@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
     # We don't care what cell we start the game on currently
     game_board.click_random_cell()
+    game_board.evaluate_board()
 
     print("\nScript finished.")
 

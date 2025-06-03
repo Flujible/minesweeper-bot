@@ -85,6 +85,7 @@ class Cell:
                   f"Physical on screenshot ({colour_pixel_x},{colour_pixel_y}), Color: {actual_rgb}")
             # For detailed debugging, save a crop around the pixel:
             crop_radius = 5 # Number of logical pixels around the center point
+            # TODO: The crop is SLIGHTLY wrong. This could be due to the gutters on the game board
             s_crop = board_screenshot.crop((colour_pixel_x - crop_radius, colour_pixel_y - crop_radius,
                                             colour_pixel_x + crop_radius, colour_pixel_y + crop_radius))
             s_crop.save(f"debug_crop_cell_board_{self.y_on_board}_{self.x_on_board}_logical_{colour_pixel_y}_{colour_pixel_x}_physical_{colour_pixel_y}_{colour_pixel_x}.png")

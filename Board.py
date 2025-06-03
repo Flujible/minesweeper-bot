@@ -1,7 +1,8 @@
 import random
 from typing import List
+import pyautogui # Added for screenshot capability
 from Cell import CaptureRegion, Cell
-from constants import LEFT_GUTTER, TOP_GUTTER
+from constants import DEBUG, LEFT_GUTTER, TOP_GUTTER
 from enums import CellState
 
 class Board:
@@ -37,3 +38,23 @@ class Board:
 
     def click_random_cell(self) -> None:
         self.board_array[random.randint(0, self.rows - 1)][random.randint(0, self.cols - 1)].click(self.capture_region)
+
+    def evaluate_board(self):
+        """
+        Takes a screenshot of the entire board and evaluates the state of each cell
+        based on that single screenshot.
+        """
+        print("Evaluating board...")
+        board_screenshot = pyautogui.screenshot(region=self.capture_region)
+        if DEBUG:
+            board_screenshot.save("full_board_evaluation_screenshot.png")
+
+        for i, row_of_cells in enumerate(self.board_array):
+            for j, cell in enumerate(row_of_cells):
+                # The cell's evaluate_state method uses its board-relative coordinates
+                # to find its color within the provided board_screenshot.
+                new_state = cell.evaluate_state(board_screenshot)
+                cell.state = new_state
+                if DEBUG:
+                    print(f"Evaluated Cell ({i},{j}): State set to {new_state}")
+        print("Board evaluation complete.")
