@@ -21,9 +21,9 @@ class Board:
         # The region on the screen where the game board is located
         self.capture_region: CaptureRegion = (LEFT_GUTTER, TOP_GUTTER, self.logical_width, self.logical_height)
 
-        for i in range(rows):
+        for i in range(self.rows):
             row_cells: List[Cell] = []
-            for j in range(cols):
+            for j in range(self.cols):
                 row_cells.append(
                     Cell(
                         x_on_board=j * self.square_width,
