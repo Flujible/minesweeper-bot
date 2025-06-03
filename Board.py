@@ -1,3 +1,4 @@
+import random
 from Cell import Cell
 from constants import LEFT_GUTTER, TOP_GUTTER
 from enums import CellState
@@ -32,3 +33,6 @@ class Board:
                     )
                 )
             self.board_array.append(row_cells)
+
+    def click_random_cell(self):
+        self.board_array[random.randint(0, self.rows - 1)][random.randint(0, self.cols - 1)].click(self.capture_region)

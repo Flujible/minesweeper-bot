@@ -34,8 +34,7 @@ class Cell:
         """
         if self.state == CellState.UNCLICKED:
             pyautogui.moveTo(self.screen_centre_coords[0], self.screen_centre_coords[1])
-            # pyautogui.click(self.screen_centre_coords[0], self.screen_centre_coords[1]) # UNCOMMENT FOR ACTUAL GAMEPLAY
-            # print(f"INFO: pyautogui.click() on cell at ({self.x_on_board},{self.y_on_board}) screen: {self.screen_centre_coords} is COMMENTED OUT.")
+            pyautogui.click(self.screen_centre_coords[0], self.screen_centre_coords[1])
 
             time.sleep(0.15) # Crucial: Give the game UI time to update after the click
 

@@ -18,6 +18,9 @@ if __name__ == "__main__":
     print("Pausing for 3 seconds before starting...")
     time.sleep(3)
 
+    # We don't care what cell we start the game on currently
+    game_board.click_random_cell()
+
     print("\nScript finished.")
 
 
