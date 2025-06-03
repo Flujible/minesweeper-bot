@@ -1,12 +1,16 @@
 import time
+from typing import Tuple
 import pyautogui
 from constants import DEBUG, EMPTY_CELL_COLOR_RGB, LEFT_GUTTER, TOP_GUTTER
 from enums import CellState, Numbers
-from screenshot_utils import colors_match_with_tolerance
+from screenshot_utils import RGBColour, colors_match_with_tolerance
+from PIL.Image import Image
 
+
+CaptureRegion = Tuple[int, int, int, int]
 
 class Cell:
-    def __init__(self, x_on_board, y_on_board, width, height, initial_state):
+    def __init__(self, x_on_board: int, y_on_board: int, width: int, height: int, initial_state: CellState):
         self.x_on_board = x_on_board  # X position relative to the board's top-left
         self.y_on_board = y_on_board  # Y position relative to the board's top-left
 
@@ -26,7 +30,7 @@ class Cell:
         # Offset within the cell to check for its color/number (logical pixels)
         self.colour_check_offset = (11, 12) # Specific offset for color checking
 
-    def click(self, board_capture_region):
+    def click(self, board_capture_region: CaptureRegion) -> None:
         """
         Performs a click on the cell, then captures a screenshot of the board
         and evaluates the cell's new state.
