@@ -46,7 +46,7 @@ class Cell:
             board_screenshot = pyautogui.screenshot(region=board_capture_region)
 
             if DEBUG:
-                board_screenshot.save("board_screenshot.png")
+                board_screenshot.save("./images/board_screenshot.png")
 
             self.state = self.evaluate_state(board_screenshot)
             print(f"State of cell ({self.x_on_board / self.width}, {self.y_on_board / self.height}) set to: {self.state}")
@@ -88,7 +88,7 @@ class Cell:
             # TODO: The crop is SLIGHTLY wrong. This could be due to the gutters on the game board
             s_crop = board_screenshot.crop((colour_pixel_x - crop_radius, colour_pixel_y - crop_radius,
                                             colour_pixel_x + crop_radius, colour_pixel_y + crop_radius))
-            s_crop.save(f"debug_crop_cell_board_{self.y_on_board}_{self.x_on_board}_logical_{colour_pixel_y}_{colour_pixel_x}_physical_{colour_pixel_y}_{colour_pixel_x}.png")
+            s_crop.save(f"./images/debug_crop_cell_board_{self.y_on_board}_{self.x_on_board}_logical_{colour_pixel_y}_{colour_pixel_x}_physical_{colour_pixel_y}_{colour_pixel_x}.png")
 
 
         # Check for numbers

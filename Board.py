@@ -47,7 +47,7 @@ class Board:
         print("Evaluating board...")
         board_screenshot = pyautogui.screenshot(region=self.capture_region)
         if DEBUG:
-            board_screenshot.save("full_board_evaluation_screenshot.png")
+            board_screenshot.save("./images/full_board_evaluation_screenshot.png")
 
         for i, row_of_cells in enumerate(self.board_array):
             for j, cell in enumerate(row_of_cells):
