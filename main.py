@@ -12,16 +12,18 @@ DEBUG = False
 # This is used because pyautogui.screenshot() captures physical pixels.
 
 if __name__ == "__main__":
-    # DEBUG = True # Crucial: Enable detailed print statements and image saving
-
     game_board = Board(rows=9, cols=9)
     print(f"Board initialized. Capture region: {game_board.capture_region}")
     print("Ensure your Minesweeper game window is visible and positioned correctly.")
-    print("Pausing for 3 seconds before starting... Make sure cell (1,1) is in a known state (e.g., unclicked, or click it manually to reveal a number/empty).")
+    print("Pausing for 3 seconds before starting...")
     time.sleep(3)
 
+    print("\nScript finished.")
+
+
+def debug():
     # Example: Click and evaluate a few cells
-    cells_to_test = [(1,1), (3, 4), (2, 4)]
+    cells_to_test = []
 
     for r, c in cells_to_test:
         if 0 <= r < game_board.rows and 0 <= c < game_board.cols: # r is row index, c is col index
@@ -43,6 +45,3 @@ if __name__ == "__main__":
     #             print(f"Cell ({i},{j}) final state: {cell.state}")
     #         else:
     #             print(f"Skipping already processed cell ({i},{j}), state: {cell.state}")
-
-
-    print("\nScript finished.")
